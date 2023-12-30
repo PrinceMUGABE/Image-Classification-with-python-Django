@@ -1,0 +1,52 @@
+{% extends 'authentication/base.html' %}
+{% block title %}Contact Us{% endblock %}
+
+{% block content %}
+<nav class=" navbar navbar-expand-lg bg-primary  navbar-dark">
+    <div class="container">
+            <label  class="navbar-brand text-black ">STUDENT</label>
+
+             <button class="navbar-toggler btn-success" type="button"
+                    data-bs-toggle="collapse"
+                data-bs-target="#navbarmenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarmenu">
+
+                         <ul class="navbar-nav ms-auto  ">
+                                <li class="nav-item active px-5">
+                                    <a class="nav-link text-white " href="{% url 'home' %}">HOME <span
+                                            class="sr-only"></span></a>
+                                </li>
+                                <li class="nav-item active px-5">
+                                    <a class="nav-link  text-white" href="{% url 'about' %}">ABOUT <span
+                                            class="sr-only"></span></a>
+                                </li>
+                              
+                                <li class="nav-item active px-5">
+                                    <a class="nav-link text-white" href="{% url 'signin' %}">Login</a>
+                                </li>
+                          </ul>
+
+            </div>
+
+    </div>
+</nav>
+
+    <h3 class="about-title text-white py-5" style="text-align:center;">About Us</h3>
+    <div class="about-division px-5 py-5 justify-content-center" style="margin-left:200px;">
+       
+        <br>
+  
+        
+        <p class="text-white" px-5>This site help admin to classfy images and distinguish their contents.<br>
+        there are some already saved images; so by uploading any other particular<br> image
+        the system by itself analyse such image with the stored ones therefore returns<br>
+        whether <span class="text-danger">Cheating detected</span> if the uploaded image doesn't<br>
+        with any of the saved once or <span class="text-success">No cheating detected</span> if that particular uploaded<br>
+        one matches with one or another from the saved ones</p>
+        
+
+    </div>
+{% endblock %}

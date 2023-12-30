@@ -1,0 +1,43 @@
+{% extends 'authentication/base.html' %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg bg-primary navbar-dark">
+    <div class="container">
+        <a href="#" class="navbar-brand text-black ">USER</a>
+        <button class="navbar-toggler btn-success" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarmenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarmenu">
+            <ul class="navbar-nav ms-auto">
+               
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class='bx bxl-mailchimp'></i>
+                        Profile
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end" style="background: #081b29; bolder: none;" aria-labelledby="profileDropdown">
+                        <a class="dropdown-item " href="#">Hello, {{ user.username }}</a>
+                        <a class="dropdown-item" href="{% url 'signin' %}">Log out</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+    <h3 class="user-page-heading text-white align-text-center px-5" style="margin-left:300px; margin-top:100px;">Welcome!</h3>
+
+    <!-- Display custom message based on whether cheating was detected or not -->
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <!-- Display username and custom text -->
+<label class="dashboard-display-message text-white py-5" style="margin-left:300px;">This is your dashboard.</label>
+{% endblock %}

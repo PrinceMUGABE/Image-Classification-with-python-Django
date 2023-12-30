@@ -1,0 +1,82 @@
+{% extends 'authentication/base.html' %}
+{% block title %}Home{% endblock %}
+{% load static %}
+
+{% block content %}
+
+
+    <nav class=" navbar navbar-expand-lg bg-primary  navbar-dark">
+        <div class="container">
+                <a href="#" class="navbar-brand text-black "></a>
+
+                 <button class="navbar-toggler btn-success" type="button"
+                        data-bs-toggle="collapse"
+                    data-bs-target="#navbarmenu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarmenu">
+
+                             <ul class="navbar-nav ms-auto  ">
+                                    <li class="nav-item active px-5">
+                                        <a class="nav-link text-white " href="{% url 'home' %}">HOME <span
+                                                class="sr-only"></span></a>
+                                    </li>
+                                    <li class="nav-item active px-5">
+                                        <a class="nav-link  text-white" href="{% url 'about' %}">ABOUT <span
+                                                class="sr-only"></span></a>
+                                    </li>
+                                    <li class="nav-item active px-5">
+                                        <a class="nav-link text-white" href="{% url 'signin' %}">Login</a>
+                                    </li>
+                              </ul>
+
+                </div>
+
+        </div>
+    </nav>
+
+<div class="container-fluid py-2">
+    <h1 class="text-info px-5 text-center">CHEATING DETECTOR</h1>
+
+    <div class="container d-flex gap-2 justify-content-center py-5" >
+        <div  style="display:flex;">
+            <div>
+                <img class="image" src="{% static 'img/python1.jpg' %}">
+                <p class="text-white mt-4">Reading books is important because it helps to expand your knowledge and understanding of the world, improves cognitive function, reduces stress levels, increases empathy and creativity</p>
+            </div>
+          
+        </div>
+        <div style="display:flex;">
+            <div>
+                
+                <img class="image" src="{% static 'img/img2.jpg' %}">
+                <p class="text-white mt-4">Reading books is important because it helps to expand your knowledge and understanding of the world, improves cognitive function, reduces stress levels, increases empathy and creativity</p>
+            </div>
+  
+        </div>
+        <br>
+        <div  style="display:flex;">
+            <div>
+                
+                <img class="image" src="{% static 'img/stud2.jpeg' %}">
+                <p class="text-white mt-4">Sport is good for your physical and mental health. They also help develop leadership skills and equip them with the ability to set goals and build character. Participating in sports can lead to higher self-esteem and better social interaction.</p>
+            </div>
+          
+        </div>
+       
+        <div  style="display:flex;">
+            <div>
+                <img class="image" src="{% static 'img/stud1.jpeg' %}">
+                <p class="text-white mt-4">Reading books is important because it helps to expand your knowledge and understanding of the world, improves cognitive function, reduces stress levels, increases empathy and creativity</p>
+            </div>
+        
+        </div>
+    </div>
+   
+</div>
+    
+
+    <script src="" async defer></script>
+
+{% endblock %}  

@@ -1,0 +1,79 @@
+{% extends 'authentication/base.html' %}
+{% block title %}login page{% endblock %}
+
+{% block content %}
+
+<nav class=" navbar navbar-expand-lg bg-primary  navbar-dark">
+    <div class="container">
+            <a href="#" class="navbar-brand text-black ">STUDENT</a>
+
+             <button class="navbar-toggler btn-success" type="button"
+                    data-bs-toggle="collapse"
+                data-bs-target="#navbarmenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarmenu">
+
+                         <ul class="navbar-nav ms-auto  ">
+                                <li class="nav-item active px-5">
+                                    <a class="nav-link text-white " href="{% url 'home' %}">HOME <span
+                                            class="sr-only"></span></a>
+                                </li>
+                                <li class="nav-item active px-5">
+                                    <a class="nav-link  text-white" href="{% url 'about' %}">ABOUT <span
+                                            class="sr-only"></span></a>
+                                </li>
+                              
+                                <li class="nav-item active px-5">
+                                    <a class="nav-link text-white" href="{% url 'signup' %}">Create Account</a>
+                                </li>
+                          </ul>
+
+            </div>
+
+    </div>
+</nav>
+
+    
+     
+
+    <div class="wrapper" style="margin-left:50px;">
+      
+        <div class="form-box login px-5">
+              <!-- Display messages -->
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <h2>Login</h2>
+            <form class="login_form_bg" action="{% url 'signin' %}" method="post">
+                {% csrf_token %}
+                <div class="input-box">
+                    <input type="text" name="username" class="form-control" required>
+                    <label>Username</label>
+                    <i class='bx bxs-user'></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" name="pass1" class="form-control" required>
+                    <label>Password</label>
+                    <i class='bx bxs-lock-alt' ></i>
+                </div>
+                <button type="submit" class="btn">Login</button>
+                <div class="logreg-link">
+                    <p>
+                        Don't have an account? <a href="{% url 'signup' %}" class="register-link">Sign Up</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+       
+    </div>
+
+    
+
+{% endblock %}
+

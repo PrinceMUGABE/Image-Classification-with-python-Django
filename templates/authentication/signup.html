@@ -1,0 +1,166 @@
+{% extends 'authentication/base.html' %}
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+
+<nav class=" navbar navbar-expand-lg bg-primary  navbar-dark">
+    <div class="container">
+            <a href="#" class="navbar-brand text-black ">STUDENT</a>
+
+             <button class="navbar-toggler btn-success" type="button"
+                    data-bs-toggle="collapse"
+                data-bs-target="#navbarmenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarmenu">
+
+                         <ul class="navbar-nav ms-auto  ">
+                                <li class="nav-item active px-5">
+                                    <a class="nav-link text-white " href="{% url 'home' %}">HOME <span
+                                            class="sr-only"></span></a>
+                                </li>
+                                <li class="nav-item active px-5">
+                                    <a class="nav-link  text-white" href="{% url 'about' %}">ABOUT <span
+                                            class="sr-only"></span></a>
+                                </li>
+                              
+                                <li class="nav-item active px-5">
+                                    <a class="nav-link text-white" href="{% url 'signin' %}">Login</a>
+                                </li>
+                          </ul>
+
+            </div>
+
+    </div>
+</nav>
+
+
+    
+
+    <div class="wrapper" style="margin-left:50px;">
+        <div class="form-box signup ">
+            <!-- Display messages -->
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if form.username.errors %}
+            <p class="error">{{form.username.errors}}</p>
+        {% endif %}
+            <h2>Sign Up</h2>
+            <form class="signup_form_bg" action="{% url 'signup' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="input-box">
+                    <input type="text" name="username" class="form-control" required>
+                    <label>Username</label>
+                    <i class='bx bxs-user'></i>
+                </div>
+
+                <div class="input-box">
+                    <input type="email" name="email" class="form-control" required>
+                    <label>Email</label>
+                    <i class='bx bxs-envelope'></i>
+                </div>
+
+                <div class="input-box">
+                    <input type="password" name="pass1" class="form-control" required>
+                    <label>Password</label>
+                    <i class='bx bxs-lock-alt'></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" name="pass2" class="form-control" required>
+                    <label>Confirm Password</label>
+                    <i class='bx bxs-lock-alt'></i>
+                </div>
+               
+                <button type="submit" class="btn signup">Sign Up</button>
+                <div class="logreg-link">
+                    <p>
+                        Already have an account? <a href="{% url 'signin' %}" class="login-link">Log In</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,656 @@
+
+<!-- manage_users_form.html -->
+
+{% extends 'authentication/base.html' %}
+{% block title %}Manage Users{% endblock %}
+
+{% block content %}
+
+
+
+
+<nav class="navbar navbar-expand-lg bg-primary navbar-dark">
+    <div class="container">
+
+        <button class="navbar-toggler btn-success" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarmenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarmenu">
+            <ul class="navbar-nav ms-auto">
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class='bx bxl-mailchimp'></i>
+                        Profile
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end" style="background: #081b29; bolder: none;" aria-labelledby="profileDropdown">
+                        <a class="dropdown-item " href="#">Hello, {{ user.username }}</a>
+                        <a class="dropdown-item" href="{% url 'signout' %}">Log out</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+
+<div class="container-fluid" style="display:flex;">
+    <div class="row">
+        <nav id="sidebar" class="col-md-5 col-lg-1 d-md-block bg-primary sidebar px-lg-3" style="height: 125%;">
+            <div class="position-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active text-white ">STUDENT</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active text-white" href="{% url 'dashboard_admin'%}">
+                            <i class='bx bxs-dashboard'>Dashboard</i>
+
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link py-3 text-white" href="#">
+                            <i class='bx bxs-user-badge'></i>
+                            Manage Users
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link py-3 text-white" href="#" onclick="openUploadImageForm()">
+                            <i class='bx bx-photo-album'></i>
+                            Upload Image
+                        </a>
+                    </li>
+
+
+                </ul>
+            </div>
+        </nav>
+
+
+    </div>
+    <div class="container">
+        <div class="d-flex">
+            <div>
+<!--                <h3 class="px-5"><span class="text-success px-5">Welcome to your Dashboard-Admin Page</h3>-->
+            </div>
+
+
+        </div>
+          <!--          Display messages -->
+         {% if messages %}
+         <ul class="messages py-3">
+             {% for message in messages %}
+                 <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+             {% endfor %}
+         </ul>
+        {% endif %}
+
+    <br>
+    <br>
+
+    <div class="admin_dashboard">
+        <div class="display_user_table">
+        <div>
+            <div>
+                <div>
+                    <div>
+                       <form id="userTableForm">
+                            {% csrf_token %}
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody >
+                                    {% for user in users %}
+                                    <tr>
+                                        <td>{{ user.id }}</td>
+                                        <td>{{ user.username }}</td>
+                                        <td>{{ user.email }}</td>
+                                        <td>
+<!--                                            <button class="signup_form_bg btn"><a href="{% url 'edit_user' user.id %}"><i class='bx bxs-edit-alt'></i></a></button>-->
+                                             <a href="{% url 'edit_user' user.id %}"><i class='bx bxs-edit-alt'></i></a>
+
+                                            <button class="signup_form_bg btn" onclick="confirmDeleteUser('{{ user.id }}')"><i class='bx bx-trash text-danger'></i></button>
+                                            <button class="signup_form_bg btn btn-primary text-light w-2 h-2" onclick="makeUserAdmin('{{ user.id }}')">Make Admin</button>
+                                        </td>
+                                    </tr>
+                                    <p> USER UD: {{user.id}} </p>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                       </form>
+                        <br>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="upload_image_on_admin_dashboard_form">
+            <!-- Display Image Upload Form -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <!--            <h2>Admin Dashboard</h2>-->
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Users</h5>
+                            <p class="card-text">{{ total_users }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Active Users</h5>
+                            <p class="card-text">{{ active_users }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">New Users Today</h5>
+                            <p class="card-text">{{ new_users_today }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+                <!-- Display the selected user's information -->
+            {% if selected_user %}
+            <div class="alert alert-info mt-3">
+                <p>Displaying activities for: {{ selected_user.username }}</p>
+            </div>
+            {% endif %}
+
+                <div class="latestActivitiesTableContainer">
+
+                    <div class="">
+
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <div class="d-flex">
+                                    <div >
+                                        <h3 class="text-white px-5 py-2">Latest Activity</h3>
+                                    </div>
+                                    <div class="px-3">
+                                        <div class="form-group d-flex">
+                                            <div>
+                                                <input type="text" class="form-control" id="searchUsername" placeholder="Search by Username">
+                                            </div>
+                                            <div class="px-3">
+                                                <button class="btn btn-secondary px-3" id="filterByUsername">Search</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <table id="latestActivitiesTable" class="table">
+                                    <thead >
+                                        <tr>
+                                            <th></th>
+                                            <th class="mx-5">User</th>
+                                            <th class="mx-5">Action</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for activity in all_activities %}
+                                        <tr>
+                                            <td><input type="checkbox" class="activity-checkbox" value="{{ activity.id }}"></td>
+                                            <td>{{ activity.user }}</td>
+                                            <td>{{ activity.action }}</td>
+                                            <td>{{ activity.timestamp }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+
+                                <!-- Pagination Controls -->
+                                <div class="pagination">
+                                    <span class="step-links">
+                                        {% if page.has_previous %}
+                                            <a href="?page=1">&laquo; first</a>
+                                            <a href="?page={{ page.previous_page_number }}">previous</a>
+                                        {% endif %}
+
+                                        <span class="current-page">{{ page.number }}</span>
+
+                                        {% if page.has_next %}
+                                            <a href="?page={{ page.next_page_number }}">next</a>
+                                            <a href="?page={{ page.paginator.num_pages }}">last &raquo;</a>
+                                        {% endif %}
+                                    </span>
+                                </div>
+
+
+                            </div>
+                            <!-- Buttons for Exporting Data -->
+                                <div class="d-flex justify-content-between">
+                                     <button class="btn btn-secondary" onclick="selectAllActivities()">Select All</button>
+                                    <button class="btn btn-primary" onclick="exportToPDF('user-data')">Export to PDF</button>
+                                    <button class="btn btn-success" onclick="exportToExcel('activity-data')">Export to Excel</button>
+                                    <button class="btn btn-danger" onclick="deleteSelectedRows()">Delete Selected Rows</button>
+
+                                </div>
+                        </div>
+                    </div>
+
+
+                </div>
+        </main>
+
+        </div>
+
+    </div>
+
+
+    <br>
+
+
+    </div>
+    </div>
+
+
+    <script>
+        function openManageUsersForm() {
+            window.location.href = "{% url 'manage_users_form' %}";
+        }
+
+        function openUploadImageForm() {
+            window.location.href = "{% url 'upload_photo' %}";
+        }
+
+
+        function exportToPDF(type) {
+            const selectedRows = document.querySelectorAll('.activity-checkbox:checked');
+            const selectedIds = Array.from(selectedRows).map(row => row.value);
+
+            // Make an API request to generate PDF based on selectedIds
+            // Replace the following line with your actual API call
+            const url = `/generate_pdf/?type=${type}&ids=${selectedIds.join(',')}`;
+            window.open(url, '_blank');
+        }
+
+
+
+        function exportToExcel(type) {
+            const selectedRows = document.querySelectorAll('.activity-checkbox:checked');
+            const selectedIds = Array.from(selectedRows).map(row => row.value);
+
+            // Make an API request to generate Excel based on selectedIds
+            // Replace the following line with your actual API call
+            const url = `/generate_excel/?type=${type}&ids=${selectedIds.join(',')}`;
+            window.open(url, '_blank');
+        }
+
+
+<!--       function exportToPDF(type) {-->
+<!--    const selectedRows = document.querySelectorAll('.activity-checkbox:checked');-->
+<!--    const selectedIds = Array.from(selectedRows).map(row => row.value);-->
+<!--    const searchUsername = searchUsernameInput.value.toLowerCase();-->
+
+<!--    if (searchUsername && selectedIds.length > 0) {-->
+<!--        // Export only selected rows that match the search criteria-->
+<!--        const url = `/generate_pdf/?type=${type}&ids=${selectedIds.join(',')}&search_username=${searchUsername}`;-->
+<!--        window.open(url, '_blank');-->
+<!--    } else if (selectedIds.length > 0) {-->
+<!--        // Export all selected rows-->
+<!--        const url = `/generate_pdf/?type=${type}&ids=${selectedIds.join(',')}`;-->
+<!--        window.open(url, '_blank');-->
+<!--    } else {-->
+<!--        alert('No rows selected for export.');-->
+<!--    }-->
+<!--}-->
+
+<!--function exportToExcel(type) {-->
+<!--    const selectedRows = document.querySelectorAll('.activity-checkbox:checked');-->
+<!--    const selectedIds = Array.from(selectedRows).map(row => row.value);-->
+<!--    const searchUsername = searchUsernameInput.value.toLowerCase();-->
+
+<!--    if (searchUsername && selectedIds.length > 0) {-->
+<!--        // Export only selected rows that match the search criteria-->
+<!--        const url = `/generate_excel/?type=${type}&ids=${selectedIds.join(',')}&search_username=${searchUsername}`;-->
+<!--        window.open(url, '_blank');-->
+<!--    } else if (selectedIds.length > 0) {-->
+<!--        // Export all selected rows-->
+<!--        const url = `/generate_excel/?type=${type}&ids=${selectedIds.join(',')}`;-->
+<!--        window.open(url, '_blank');-->
+<!--    } else {-->
+<!--        alert('No rows selected for export.');-->
+<!--    }-->
+<!--}-->
+
+
+
+
+
+
+
+        function makeUserAdmin(userId) {
+            // Ask the user for confirmation
+            if (confirm("Are you sure you want to make this user an admin?")) {
+                // Get the CSRF token from the cookie
+                const csrftoken = getCookie('csrftoken');
+
+                // Send an AJAX request to the server to make the user an admin
+                $.ajax({
+                    url: "{% url 'make_user_admin' %}",
+                    method: "POST",
+                    data: { user_id: userId },
+                    headers: { "X-CSRFToken": csrftoken },
+                    success: function (response) {
+                        if (response.success) {
+                            if (response.is_admin) {
+                                alert("User is already an admin.");
+                            } else {
+                                alert("User is now an admin.");
+                                // Add a success message to the DOM
+                                const successMessage = document.createElement("p");
+                                successMessage.textContent = "User is now an admin.";
+                                successMessage.className = "alert alert-success";
+                                // You can append this message wherever you want in your HTML.
+                                // For example, if you have a <div id="messages">...</div> element
+                                // where you want to display messages, you can do:
+                                // document.getElementById("messages").appendChild(successMessage);
+                            }
+                            // Optionally, you can update the UI or perform other actions here.
+                        } else {
+                            alert("Failed to make the user an admin.");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Error: " + error);
+                    },
+                });
+            }
+        }
+
+
+
+    // Function to retrieve the CSRF token from cookies
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== "") {
+                const cookies = document.cookie.split(";");
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Check if the cookie name matches the CSRF cookie name used by Django
+                    if (cookie.substring(0, name.length + 1) === name + "=") {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+
+        function selectAllActivities() {
+            // Get all the activity checkboxes
+            const activityCheckboxes = document.querySelectorAll('.activity-checkbox');
+
+            // Determine if any checkboxes are currently checked
+            let anyChecked = false;
+            activityCheckboxes.forEach((checkbox) => {
+                if (checkbox.checked) {
+                    anyChecked = true;
+                }
+            });
+
+            // Check or uncheck all checkboxes based on the current state
+            activityCheckboxes.forEach((checkbox) => {
+                checkbox.checked = !anyChecked;
+            });
+        }
+
+
+
+
+
+<!--    function deleteSelectedRows() {-->
+<!--        // Get all the activity checkboxes-->
+<!--        const activityCheckboxes = document.querySelectorAll('.activity-checkbox');-->
+
+<!--        // Check if any checkboxes are selected-->
+<!--        let anyChecked = false;-->
+<!--        activityCheckboxes.forEach((checkbox) => {-->
+<!--            if (checkbox.checked) {-->
+<!--                anyChecked = true;-->
+<!--            }-->
+<!--        });-->
+
+<!--        if (anyChecked) {-->
+<!--            // Display a confirmation dialog-->
+<!--            const confirmation = confirm('Are you sure you want to delete the selected rows? This action cannot be undone.');-->
+
+<!--            if (confirmation) {-->
+<!--                // Collect the IDs of selected rows-->
+<!--                const selectedIds = [];-->
+<!--                activityCheckboxes.forEach((checkbox) => {-->
+<!--                    if (checkbox.checked) {-->
+<!--                        selectedIds.push(checkbox.value);-->
+<!--                    }-->
+<!--                });-->
+
+<!--                // Log the selected IDs for debugging-->
+<!--                console.log('Selected IDs:', selectedIds);-->
+
+<!--                // Send an AJAX request to delete the selected rows-->
+<!--                fetch('/delete_selected_activities/', {-->
+<!--                    method: 'POST',-->
+<!--                    headers: {-->
+<!--                        'Content-Type': 'application/json',-->
+<!--                        'X-CSRFToken': getCookie('csrftoken'), // Ensure you have a function to get the CSRF token-->
+<!--                    },-->
+<!--                    body: JSON.stringify({ ids: selectedIds }),-->
+<!--                })-->
+<!--                .then((response) => response.json())-->
+<!--                .then((data) => {-->
+<!--                    console.log('Response:', data); // Log the response for debugging-->
+<!--                    if (data.success) {-->
+<!--                        alert('Selected rows have been deleted successfully.');-->
+<!--                        window.location.reload(); // Refresh the page-->
+<!--                    } else {-->
+<!--                        alert('Failed to delete selected rows.');-->
+<!--                    }-->
+<!--                })-->
+<!--                .catch((error) => {-->
+<!--                    console.error('Error:', error); // Log any errors for debugging-->
+<!--                    alert('An error occurred while deleting selected rows.');-->
+<!--                });-->
+<!--            }-->
+<!--        } else {-->
+<!--            alert('No rows selected for deletion.');-->
+<!--        }-->
+<!--    }-->
+
+
+
+
+    function deleteSelectedRows() {
+    const selectedRows = document.querySelectorAll('.activity-checkbox:checked');
+    const selectedIds = Array.from(selectedRows).map(row => row.value);
+
+    if (selectedIds.length === 0) {
+        alert('No rows selected for deletion.');
+        return;
+    }
+
+    // Display a confirmation dialog
+    const confirmation = confirm('Are you sure you want to delete the selected rows? This action cannot be undone.');
+
+    if (confirmation) {
+        // Send an AJAX request to delete the selected rows
+        fetch('/delete_selected_activities/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'), // Ensure you have a function to get the CSRF token
+            },
+            body: JSON.stringify({ ids: selectedIds }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log('Response:', data); // Log the response for debugging
+            if (data.success) {
+                alert('Selected rows have been deleted successfully.');
+                // Remove the deleted rows from the table (optional)
+                selectedRows.forEach((row) => {
+                    row.closest('tr').remove();
+                });
+            } else {
+                alert('Failed to delete selected rows.');
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error); // Log any errors for debugging
+            alert('An error occurred while deleting selected rows.');
+        });
+    }
+}
+
+
+
+
+
+
+
+        function confirmDeleteUser(userId) {
+            if (confirm("Are you sure you want to delete this user? This action cannot be undone.")) {
+                // Make an AJAX request to delete the user
+                fetch(`/delete_user/${userId}/`, {
+                    method: 'POST',  // Use POST method to trigger user deletion
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),  // Include CSRF token
+                    },
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        alert('User deleted successfully.');
+
+                        // Manually refresh the table content
+                        refreshUserTable(); // You need to implement this function
+                    } else {
+                        alert('Failed to delete user.');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert('An error occurred while deleting user.');
+                });
+            }
+        }
+
+
+
+        function refreshUserTable() {
+            // Make an AJAX request to fetch the updated user data
+            fetch('/get_user_data/')  // Replace with the appropriate URL to fetch user data
+                .then((response) => response.json())
+                .then((data) => {
+                    // Replace the content of the user table container with the updated data
+                    const userTableContainer = document.getElementById('user-table-container');
+                    if (userTableContainer) {
+                        userTableContainer.innerHTML = data.userTableHtml; // Assuming 'data.userTableHtml' contains updated table HTML
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert('An error occurred while refreshing the user table.');
+                });
+        }
+
+
+
+
+
+
+        // Function to retrieve the CSRF token from cookies
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== "") {
+                const cookies = document.cookie.split(";");
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === name + "=") {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+           $(document).ready(function () {
+                $('.edit-user-button').click(function (event) {
+                    event.preventDefault(); // Prevent the default link behavior
+
+                    // Get the user ID from the data attribute
+                    var userId = $(this).data('user-id');
+
+                    // Use the user ID to construct the edit URL
+                    var editUrl = '/edit_user/' + userId + '/';
+
+                    // Redirect to the edit URL
+                    window.location.href = editUrl;
+                });
+            });
+
+
+
+       document.addEventListener("DOMContentLoaded", function () {
+            const searchUsernameInput = document.getElementById("searchUsername");
+            const filterByUsernameButton = document.getElementById("filterByUsername");
+            const latestActivitiesTable = document.getElementById("latestActivitiesTable");
+
+            // Store a copy of the original table content
+            const originalTableHTML = latestActivitiesTable.innerHTML;
+
+            // Function to filter and display activities based on username
+            function filterActivitiesByUsername() {
+                const searchUsername = searchUsernameInput.value.toLowerCase();
+
+                // Restore the original table content
+                latestActivitiesTable.innerHTML = originalTableHTML;
+
+                // Get all rows of the table
+                const tableRows = latestActivitiesTable.querySelectorAll("tbody tr");
+
+                // Loop through the rows and hide/unhide based on username match
+                tableRows.forEach(function (row) {
+                    const usernameCell = row.querySelector("td:nth-child(2)"); // Adjust the column index as needed
+                    const username = usernameCell.textContent.trim().toLowerCase();
+
+                    // If the row's username does not contain the search term, hide it
+                    if (!username.includes(searchUsername)) {
+                        row.style.display = "none";
+                    }
+                });
+            }
+
+            // Add a click event listener to the "Search" button
+            filterByUsernameButton.addEventListener("click", filterActivitiesByUsername);
+        });
+
+
+    </script>
+
+{% endblock %}
+
+
+

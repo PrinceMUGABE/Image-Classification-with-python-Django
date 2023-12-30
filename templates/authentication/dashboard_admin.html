@@ -1,0 +1,106 @@
+{% extends 'authentication/base.html' %}
+{% block title %}Admin_dashboard{% endblock %}
+
+
+{% block content %}
+
+
+<nav class="navbar navbar-expand-lg bg-primary navbar-dark">
+    <div class="container">
+        
+        <button class="navbar-toggler btn-success" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarmenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarmenu">
+            <ul class="navbar-nav ms-auto">
+               
+               
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class='bx bxl-mailchimp'></i>
+                        Profile
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end" style="background: #081b29; bolder: none;" aria-labelledby="profileDropdown">
+                        <a class="dropdown-item " href="#">Hello, {{ user.username }}</a>
+                        <a class="dropdown-item" href="{% url 'signin' %}">Log out</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+
+<div class="container-fluid" style="display:flex;">
+    <div class="row " style="height:100%; padding-bottom:700px;">
+        <nav id="sidebar" class="col-md-5 col-lg-1 d-md-block bg-primary sidebar px-lg-3" style="width:100%; height:100%; padding-bottom:500px;">
+            <div class="position-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active mb-2 ml-1 text-white ">STUDENT</a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link active text-white" href="{% url 'dashboard_admin'%}">
+                            <i class='bx bxs-dashboard'>Dashboard</i>
+                            
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link py-3 text-white" href="#" onclick="openManageUsersForm()">
+                            <i class='bx bxs-user-badge'></i>
+                            Manage Users
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link py-3 text-white" href="#" onclick="openUploadImageForm()">
+                            <i class='bx bx-photo-album'></i>
+                            Upload Image
+                        </a>
+                    </li>
+              
+                     
+                </ul>
+            </div>
+        </nav>
+
+
+    </div>
+    <div class="container">
+
+    <br>
+    <br>
+          <!--          Display messages -->
+         {% if messages %}
+         <ul class="messages">
+             {% for message in messages %}
+                 <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+             {% endfor %}
+         </ul>
+        {% endif %}
+
+    <br>
+    <br>
+    <hr>
+    <br>
+    <br>
+        
+
+
+    <script>
+        function openManageUsersForm() {
+            window.location.href = "{% url 'manage_users_form' %}";
+        }
+
+        function openUploadImageForm() {
+            window.location.href = "{% url 'upload_photo' %}";
+        }
+
+    
+    </script>
+{% endblock %}
+
